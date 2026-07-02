@@ -22,7 +22,6 @@ model User {
   role          String    @default("PARTICIPANT")
   sessions      Session[]
   accounts      Account[]
-  posts         Post[]
 
   @@map("user")
 }
@@ -71,11 +70,4 @@ model Verification {
   @@map("verification")
 }
 
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?
-}
+
