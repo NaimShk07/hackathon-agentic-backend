@@ -16,11 +16,13 @@ Last updated: 2026-07-02T23:14:00+05:30
 - Handled the body parsing conflict by delegating body-parsing lifecycle to `nestjs-better-auth` config instead of NestJS global body-parser.
 - Mocked the dynamic dependencies (Prisma, Arcjet, Better Auth) in Jest unit and e2e testing environments to keep test execution fast and isolated from actual databases/WASM.
 - Disabled CSRF checks in development to allow easy local API testing via tools like Postman.
+- Configured `prisma.config.ts` to prioritize `DIRECT_DATABASE_URL` for CLI commands (like migrations and Prisma Studio) while keeping the pooled `DATABASE_URL` for runtime queries, matching Prisma 7's configuration rules.
 
 ## Problems solved
 - Resolved `MISSING_OR_NULL_ORIGIN` error during local API testing by configuring `advanced.disableCSRFCheck: true` in the Better Auth configuration.
 - Solved Jest "Unexpected Token" import issues with ESM packages under CommonJS by updating `transformIgnorePatterns` and introducing Jest module mocks.
 - Solved relative import path extension `.js` errors in Jest tests by adding a `moduleNameMapper` mapping `.js` imports to extensionless paths.
+- Resolved Prisma Studio failure with Accelerate URLs by retrieving the database direct connection string and configuring the CLI to use it in `prisma.config.ts`.
 
 ## Current state
 - All tests (`npm run test` and `npm run test:e2e`) are passing.
