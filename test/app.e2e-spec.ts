@@ -18,6 +18,8 @@ jest.mock('@thallesp/nestjs-better-auth', () => {
     AllowAnonymous: () => () => {},
     Session: () => () => {},
     OptionalAuth: () => () => {},
+    AuthGuard: class {},
+    Roles: () => () => {},
     AuthModule: mockModule,
   };
 });

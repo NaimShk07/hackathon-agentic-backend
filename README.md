@@ -41,6 +41,8 @@ Better Auth endpoints are mounted automatically under `/api/auth/*` (e.g., `/api
 ### User Endpoints
 - `POST /user` - Register/sign up a new user manually (for development compatibility).
   - **Body:** `{"name": "Alice", "email": "alice@prisma.io"}`
+- `GET /user/all` - Retrieve all users (Requires authentication session, Admin only).
+- `GET /user/:id` - Retrieve a single user by ID (Requires authentication session; throws 404 if not found).
 
 ### Post Endpoints
 - `POST /post` - Create a draft post for a user (Requires authentication session).
