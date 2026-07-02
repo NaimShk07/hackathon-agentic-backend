@@ -4,10 +4,9 @@ import { AppService } from './app.service';
 import { ArcjetModule } from './lib/arcjet/arcjet.module';
 import { PrismaModule } from './lib/database/prisma.module';
 import { UserModule } from './module/user/user.module';
-import { PostModule } from './module/post/post.module';
 import { AuthLibModule } from './lib/auth/auth.module';
 @Module({
-  imports: [ArcjetModule, PrismaModule, AuthLibModule, UserModule, PostModule],
+  imports: [ArcjetModule, PrismaModule, AuthLibModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })

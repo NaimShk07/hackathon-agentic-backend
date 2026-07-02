@@ -24,7 +24,6 @@ src/
 │   ├── auth/            # Better Auth static config and global NestJS integration module
 │   └── database/        # Prisma service and global module configuration
 ├── module/              # Feature modules
-│   ├── post/            # Post model logic, endpoints, and controller
 │   └── user/            # User model logic and endpoints
 ├── main.ts              # App bootstrapper loading dotenv configuration
 └── app.module.ts        # App root module importing lib and feature modules
@@ -43,15 +42,6 @@ Better Auth endpoints are mounted automatically under `/api/auth/*` (e.g., `/api
   - **Body:** `{"name": "Alice", "email": "alice@prisma.io"}`
 - `GET /user/all` - Retrieve all users (Requires authentication session, Admin only).
 - `GET /user/:id` - Retrieve a single user by ID (Requires authentication session; throws 404 if not found).
-
-### Post Endpoints
-- `POST /post` - Create a draft post for a user (Requires authentication session).
-  - **Body:** `{"title": "Hello World", "content": "Optional content", "authorEmail": "alice@prisma.io"}`
-- `GET /post/feed` - Retrieve all published posts (Public).
-- `GET /post/:id` - Fetch a single post by its String ID (Public).
-- `PUT /post/publish/:id` - Publish a post draft (Requires authentication session).
-- `DELETE /post/:id` - Delete a post (Requires authentication session).
-- `GET /post/filtered-posts/:searchString` - Search posts by title or content matching the query (Public).
 
 ---
 
