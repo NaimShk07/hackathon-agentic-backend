@@ -15,10 +15,10 @@ Last updated: 2026-07-02T23:14:00+05:30
 - Standardized all database primary keys to String CUIDs to match Better Auth.
 - Handled the body parsing conflict by delegating body-parsing lifecycle to `nestjs-better-auth` config instead of NestJS global body-parser.
 - Mocked the dynamic dependencies (Prisma, Arcjet, Better Auth) in Jest unit and e2e testing environments to keep test execution fast and isolated from actual databases/WASM.
-- Kept CSRF checks active in development, requiring clients to pass the `Origin` header.
+- Disabled CSRF checks in development to allow easy local API testing via tools like Postman.
 
 ## Problems solved
-- Resolved `MISSING_OR_NULL_ORIGIN` error during local API testing by instructing the user to supply the `Origin: http://localhost:3000` header in the request.
+- Resolved `MISSING_OR_NULL_ORIGIN` error during local API testing by configuring `advanced.disableCSRFCheck: true` in the Better Auth configuration.
 - Solved Jest "Unexpected Token" import issues with ESM packages under CommonJS by updating `transformIgnorePatterns` and introducing Jest module mocks.
 - Solved relative import path extension `.js` errors in Jest tests by adding a `moduleNameMapper` mapping `.js` imports to extensionless paths.
 
