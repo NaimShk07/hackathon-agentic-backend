@@ -12,16 +12,18 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String                 @id @default(cuid())
+  email         String                 @unique
   name          String
   emailVerified Boolean
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
-  role          String    @default("PARTICIPANT")
+  role          String                 @default("PARTICIPANT")
   sessions      Session[]
   accounts      Account[]
+  hackathons    Hackathon[]
+  participants  HackathonParticipant[]
 
   @@map("user")
 }
@@ -70,4 +72,27 @@ model Verification {
   @@map("verification")
 }
 
+model Hackathon {
+  id           String                 @id @default(cuid())
+  name         String
+  description  String?
+  startDate    DateTime
+  endDate      DateTime
+  isActive     Boolean                @default(true)
+  authorId     String
+  author       User                   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  participants HackathonParticipant[]
 
+  @@map("hackathon")
+}
+
+model HackathonParticipant {
+  id          String    @id @default(cuid())
+  hackathonId String
+  userId      String
+  hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([hackathonId, userId])
+  @@map("hackathon_participant")
+}
