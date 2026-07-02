@@ -45,6 +45,37 @@ Better Auth endpoints are mounted automatically under `/api/auth/*` (e.g., `/api
 
 ---
 
+## Global Response Formatting
+
+All successful controller/route handler responses are automatically transformed and wrapped in a standard JSON format by a global response interceptor:
+
+```json
+{
+  "statusCode": 200,
+  "message": "Success",
+  "data": { ... }
+}
+```
+
+- **`statusCode`**: The HTTP status code of the response (e.g. `200`, `201`).
+- **`message`**: The success message. Defaults to `"Success"`.
+- **`data`**: The payload returned from the handler (or `null` if the handler returns nothing).
+
+### Custom Messages with `@ResponseMessage`
+You can override the default `"Success"` message using the custom `@ResponseMessage` decorator on a controller class or a specific route handler:
+
+```typescript
+import { ResponseMessage } from '../common/decorators/response-message.decorator.js';
+
+@Get('custom')
+@ResponseMessage('Custom message loaded')
+getCustom() {
+  return 'Custom content';
+}
+```
+
+---
+
 ## Project Commands
 
 ### General

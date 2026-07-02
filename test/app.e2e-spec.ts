@@ -67,9 +67,11 @@ jest.mock('@arcjet/nest', () => {
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from './../src/app.module';
+import { AppModule } from './../src/app.module.js';
+import { ResponseInterceptor } from '../src/common/interceptors/response.interceptor.js';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
@@ -80,14 +82,27 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    const reflector = app.get(Reflector);
+    app.useGlobalInterceptors(new ResponseInterceptor(reflector));
+
     await app.init();
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+    return request(app.getHttpServer()).get('/').expect(200).expect({
+      statusCode: 200,
+      message: 'Success',
+      data: 'Hello World!',
+    });
+  });
+
+  it('/custom (GET)', () => {
+    return request(app.getHttpServer()).get('/custom').expect(200).expect({
+      statusCode: 200,
+      message: 'Custom message loaded',
+      data: 'Custom content',
+    });
   });
 
   afterEach(async () => {
