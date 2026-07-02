@@ -16,6 +16,9 @@ export const authOptions = {
   emailAndPassword: {
     enabled: true,
   },
+  advanced: {
+    disableCSRFCheck: true, // Allow API testing without Origin headers
+  },
 };
 
 // Standalone Better Auth instance for CLI commands

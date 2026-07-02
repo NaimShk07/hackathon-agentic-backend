@@ -20,7 +20,7 @@ import { ArcjetService } from './arcjet.service';
         // Global Rate Limiting: Max 5 requests per 10 seconds for testing
         slidingWindow({
           mode: 'LIVE',
-          max: 10,
+          max: 100,
           interval: '60s',
         }),
       ],
