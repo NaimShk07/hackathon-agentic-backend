@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+} from '@nestjs/common';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { PostService } from './post.service.js';
 import { Post as PostModel } from '../../../generated/prisma/client.js';
 
@@ -7,6 +16,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Get('feed')
+  @AllowAnonymous()
   async getPublishedPosts(): Promise<PostModel[]> {
     return this.postService.posts({
       where: { published: true },
@@ -14,12 +24,16 @@ export class PostController {
   }
 
   @Get(':id')
+  @AllowAnonymous()
   async getPostById(@Param('id') id: string): Promise<PostModel | null> {
-    return this.postService.post({ id: Number(id) });
+    return this.postService.post({ id });
   }
 
   @Get('filtered-posts/:searchString')
-  async getFilteredPosts(@Param('searchString') searchString: string): Promise<PostModel[]> {
+  @AllowAnonymous()
+  async getFilteredPosts(
+    @Param('searchString') searchString: string,
+  ): Promise<PostModel[]> {
     return this.postService.posts({
       where: {
         OR: [
@@ -51,13 +65,13 @@ export class PostController {
   @Put('publish/:id')
   async publishPost(@Param('id') id: string): Promise<PostModel> {
     return this.postService.updatePost({
-      where: { id: Number(id) },
+      where: { id },
       data: { published: true },
     });
   }
 
   @Delete(':id')
   async deletePost(@Param('id') id: string): Promise<PostModel> {
-    return this.postService.deletePost({ id: Number(id) });
+    return this.postService.deletePost({ id });
   }
 }

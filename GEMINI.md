@@ -35,3 +35,24 @@ REQUIRED — do not skip, do not wait to be asked:
 
 - **First action of every session:** run `/remember restore` before doing anything else.
 - **Last action of every session:** run `/remember save` before closing.
+
+## Git workflow
+
+After completing a task successfully:
+
+* Run the project's tests (or the relevant test suite) if applicable.
+* Ensure the code builds successfully and there are no obvious linting errors.
+* Update the `README.md` if the completed task changes:
+
+  * Features
+  * Installation
+  * Configuration
+  * Environment variables
+  * API endpoints
+  * Usage
+  * Project structure
+  * Any other user-facing behavior
+* Create a Git commit using a short, clear commit message in the imperative mood (for example: `add JWT authentication`, `implement user profile endpoint`, `fix refresh token validation`).
+* Push the commit to the current branch's remote on GitHub.
+* Never create a commit or push if the task is incomplete, broken, or explicitly marked as work in progress.
+* If the task is large, split it into multiple logical commits instead of one oversized commit.

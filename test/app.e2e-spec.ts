@@ -1,3 +1,68 @@
+/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
+import 'dotenv/config';
+
+jest.mock('@thallesp/nestjs-better-auth', () => {
+  const mockModule = {
+    forRootAsync: () => ({
+      module: class {},
+      providers: [],
+      exports: [],
+    }),
+    forRoot: () => ({
+      module: class {},
+      providers: [],
+      exports: [],
+    }),
+  };
+  return {
+    AllowAnonymous: () => () => {},
+    Session: () => () => {},
+    OptionalAuth: () => () => {},
+    AuthModule: mockModule,
+  };
+});
+
+jest.mock('../src/lib/auth/auth.module', () => {
+  const { Module } = require('@nestjs/common');
+  @Module({})
+  class MockAuthLibModule {}
+  return {
+    AuthLibModule: MockAuthLibModule,
+  };
+});
+
+jest.mock('../src/lib/arcjet/arcjet.module', () => {
+  const { Module } = require('@nestjs/common');
+  @Module({})
+  class MockArcjetModule {}
+  return {
+    ArcjetModule: MockArcjetModule,
+  };
+});
+
+jest.mock('../src/lib/database/prisma.service', () => {
+  return {
+    PrismaService: class MockPrismaService {
+      async onModuleInit() {}
+    },
+  };
+});
+
+jest.mock('@arcjet/nest', () => {
+  return {
+    ArcjetModule: {
+      forRoot: () => ({
+        module: class {},
+        providers: [],
+        exports: [],
+      }),
+    },
+    ArcjetGuard: class {},
+    shield: () => {},
+    slidingWindow: () => {},
+  };
+});
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';

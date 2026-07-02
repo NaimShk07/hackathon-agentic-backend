@@ -4,9 +4,7 @@ import type { ArcjetNest } from '@arcjet/nest';
 
 @Injectable()
 export class ArcjetService {
-  constructor(
-    @Inject(ARCJET) private readonly arcjet: ArcjetNest,
-  ) {}
+  constructor(@Inject(ARCJET) private readonly arcjet: ArcjetNest) {}
 
   /**
    * Access the underlying Arcjet client instance directly.

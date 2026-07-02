@@ -1,6 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ArcjetModule as NestArcjetModule, ArcjetGuard, shield, slidingWindow } from '@arcjet/nest';
+import {
+  ArcjetModule as NestArcjetModule,
+  ArcjetGuard,
+  shield,
+  slidingWindow,
+} from '@arcjet/nest';
 import { ArcjetService } from './arcjet.service';
 
 @Global()

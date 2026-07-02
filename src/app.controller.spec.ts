@@ -1,3 +1,9 @@
+jest.mock('@thallesp/nestjs-better-auth', () => ({
+  AllowAnonymous: () => () => {},
+  Session: () => () => {},
+  OptionalAuth: () => () => {},
+}));
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

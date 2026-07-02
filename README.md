@@ -7,6 +7,7 @@ A modern, scalable NestJS 11 backend built for the Hackathon.
 - **Framework:** NestJS 11 (Express adapter)
 - **Database ORM:** Prisma ORM v7 with Prisma Postgres (managed, serverless database)
 - **Security & Shield:** Arcjet (Shield Protection against SQL injection/XSS + Global Rate Limiting)
+- **Authentication:** Better Auth integrated via `@thallesp/nestjs-better-auth` (Email/Password, custom String IDs, custom role field defaulting to `PARTICIPANT`)
 - **Configuration:** Environment-driven via `.env` (automatically loaded on bootstrap)
 
 ---
@@ -20,6 +21,7 @@ src/
 ├── common/              # Shared guards, interceptors, decorators
 ├── lib/                 # Infrastructure integration modules (marked @Global())
 │   ├── arcjet/          # Arcjet security config and global guard registration
+│   ├── auth/            # Better Auth static config and global NestJS integration module
 │   └── database/        # Prisma service and global module configuration
 ├── module/              # Feature modules
 │   ├── post/            # Post model logic, endpoints, and controller
@@ -32,18 +34,22 @@ src/
 
 ## API Endpoints
 
+### Authentication Endpoints (Better Auth)
+Better Auth endpoints are mounted automatically under `/api/auth/*` (e.g., `/api/auth/sign-up/email`, `/api/auth/sign-in/email`, `/api/auth/ok`).
+- `GET /api/auth/ok` - Health-check route for Better Auth. Returns `{ status: "ok" }`.
+
 ### User Endpoints
-- `POST /user` - Register/sign up a new user.
+- `POST /user` - Register/sign up a new user manually (for development compatibility).
   - **Body:** `{"name": "Alice", "email": "alice@prisma.io"}`
 
 ### Post Endpoints
-- `POST /post` - Create a draft post for a user.
+- `POST /post` - Create a draft post for a user (Requires authentication session).
   - **Body:** `{"title": "Hello World", "content": "Optional content", "authorEmail": "alice@prisma.io"}`
-- `GET /post/feed` - Retrieve all published posts.
-- `GET /post/:id` - Fetch a single post by its numerical ID.
-- `PUT /post/publish/:id` - Publish a post draft.
-- `DELETE /post/:id` - Delete a post.
-- `GET /post/filtered-posts/:searchString` - Search posts by title or content matching the query.
+- `GET /post/feed` - Retrieve all published posts (Public).
+- `GET /post/:id` - Fetch a single post by its String ID (Public).
+- `PUT /post/publish/:id` - Publish a post draft (Requires authentication session).
+- `DELETE /post/:id` - Delete a post (Requires authentication session).
+- `GET /post/filtered-posts/:searchString` - Search posts by title or content matching the query (Public).
 
 ---
 
