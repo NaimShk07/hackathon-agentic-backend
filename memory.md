@@ -1,33 +1,32 @@
-# Memory — Prisma Postgres Database Setup
+# Memory — Better Auth Integration
 
-Last updated: 2026-07-01T23:55:00+05:30
+Last updated: 2026-07-02T23:14:00+05:30
 
 ## What was built
-- Linked Prisma Postgres database using connection strings retrieved via the MCP tool.
-- Initialized Prisma schema and configured it with `moduleFormat = "cjs"` to resolve ES module compilation issues with NestJS's CommonJS output target.
-- Created global `PrismaService` and `PrismaModule` inside `src/lib/database/` to manage database connection lifecycle.
-- Created feature modules, services, and controllers for `user` and `post` inside `src/module/` directory.
-- Added REST API endpoints for user registration, post creation, post publishing, feed fetching, post filtering, and deletion.
-- Added database convenience commands to `package.json` (`db:generate`, `db:push`, `db:migrate`, `db:format`, `db:studio`).
-- Updated `README.md` with folder structure and API details.
+- Integrated Better Auth with NestJS using `@thallesp/nestjs-better-auth`.
+- Migrated `User` and `Post` database tables in `schema.prisma` from `Int` to `String` (using CUIDs) and added Better Auth tables (`Session`, `Account`, `Verification`).
+- Added standalone `src/lib/auth/auth.ts` configuration with a custom `role` field on `User` defaulting to `"PARTICIPANT"` (disallowed during signup via `input: false`).
+- Created a global `AuthLibModule` utilizing `AuthModule.forRootAsync` and dynamic `PrismaService` injection at NestJS bootstrap.
+- Disabled the global NestJS body parser in `main.ts` and re-enabled body parsing options in `AuthModule.forRootAsync` for standard controller routes.
+- Configured Jest and Jest E2E configurations to support ESM dependencies (`better-auth`, `arcjet`, `@noble/hashes`, `@arcjet/nest`, etc.) in a CommonJS workspace.
+- Added public route protection overrides using `@AllowAnonymous()` on public controller endpoints.
 
 ## Decisions made
-- Set `moduleFormat = "cjs"` in `schema.prisma` generator client because NestJS compiles TypeScript to CommonJS, whereas Prisma 7 defaults to generating ES module imports (`import.meta.url`) which fail at runtime.
-- Passed `accelerateUrl` in `super()` within `PrismaService` constructor to point directly to the `prisma+postgres://` URL, since `datasourceUrl` is not supported in the Accelerate runtime options block.
-- Modularized controllers and services into resource-specific directories under `src/module/` to follow the NestJS-first project rules.
+- Standardized all database primary keys to String CUIDs to match Better Auth.
+- Handled the body parsing conflict by delegating body-parsing lifecycle to `nestjs-better-auth` config instead of NestJS global body-parser.
+- Mocked the dynamic dependencies (Prisma, Arcjet, Better Auth) in Jest unit and e2e testing environments to keep test execution fast and isolated from actual databases/WASM.
+- Kept CSRF checks active in development, requiring clients to pass the `Origin` header.
 
 ## Problems solved
-- Solved invalid credentials failure on the `prisma postgres link` command by calling the MCP tool `create_prisma_postgres_connection_string` to generate connection URLs.
-- Resolved runtime `ReferenceError: exports is not defined in ES module scope` by forcing CommonJS module format in the Prisma Client generator.
-- Resolved TS compilation error `TS2353` (datasourceUrl not defined) by switching to `accelerateUrl` in the constructor.
+- Resolved `MISSING_OR_NULL_ORIGIN` error during local API testing by instructing the user to supply the `Origin: http://localhost:3000` header in the request.
+- Solved Jest "Unexpected Token" import issues with ESM packages under CommonJS by updating `transformIgnorePatterns` and introducing Jest module mocks.
+- Solved relative import path extension `.js` errors in Jest tests by adding a `moduleNameMapper` mapping `.js` imports to extensionless paths.
 
 ## Current state
-- The database is successfully migrated and in sync.
-- The NestJS application builds, starts, and runs perfectly.
-- All REST API endpoints (`/user`, `/post`, `/post/feed`, `/post/publish/:id`, etc.) are fully tested and functional with live curl commands.
+- All tests (`npm run test` and `npm run test:e2e`) are passing.
+- The project builds cleanly with `npm run build`.
+- Linter executes with 0 warnings/errors.
+- NestJS application starts and runs correctly with all routes mapped.
 
 ## Next session starts with
-- Design and implement the specific domain logic and features for the hackathon application.
-
-## Open questions
-- None.
+- Build out the domain-specific logic for the hackathon application using the authenticated user sessions and custom `role` checks.
