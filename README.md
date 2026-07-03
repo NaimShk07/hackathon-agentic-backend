@@ -43,6 +43,15 @@ Better Auth endpoints are mounted automatically under `/api/auth/*` (e.g., `/api
 - `GET /user/all` - Retrieve all users (Requires authentication session, Admin only).
 - `GET /user/:id` - Retrieve a single user by ID (Requires authentication session; throws 404 if not found).
 
+### Hackathon Endpoints
+- `POST /hackathon` - Create a new hackathon (Requires authentication session, Admin only).
+  - **Body:** DTO matching `CreateHackathonDto` (name, startsAt, endsAt, optional description and isActive).
+- `GET /hackathon` - List all hackathons (Publicly accessible).
+- `GET /hackathon/:id` - Retrieve details of a specific hackathon (Publicly accessible; throws 404 if not found).
+- `PATCH /hackathon/:id` - Update an existing hackathon (Requires authentication session, Admin only).
+  - **Body:** DTO matching `UpdateHackathonDto`.
+- `DELETE /hackathon/:id` - Delete an existing hackathon (Requires authentication session, Admin only).
+
 ---
 
 ## Global Response Formatting
