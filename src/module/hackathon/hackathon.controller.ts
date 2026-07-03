@@ -71,4 +71,13 @@ export class HackathonController {
   async remove(@Param('id') id: string) {
     return this.hackathonService.remove(id);
   }
+
+  @Post(':id/join')
+  @UseGuards(AuthGuard)
+  @Roles(['PARTICIPANT'])
+  @ResponseMessage('Joined hackathon successfully')
+  async join(@Param('id') id: string, @Session() session: UserSession) {
+    const userId = session.user.id;
+    return this.hackathonService.join(id, userId);
+  }
 }

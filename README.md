@@ -51,6 +51,7 @@ Better Auth endpoints are mounted automatically under `/api/auth/*` (e.g., `/api
 - `PATCH /hackathon/:id` - Update an existing hackathon (Requires authentication session, Admin only).
   - **Body:** DTO matching `UpdateHackathonDto`.
 - `DELETE /hackathon/:id` - Delete an existing hackathon (Requires authentication session, Admin only).
+- `POST /hackathon/:id/join` - Join an active hackathon (Requires authentication session, Participant only; throws 400 if inactive, ended, or already joined).
 
 ---
 
